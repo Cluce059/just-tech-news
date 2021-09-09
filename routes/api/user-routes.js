@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { resourceLimits } = require('worker_threads');
-const { User, Post, Vote } = require('../../models');
+const { User, Post, Vote, Comment } = require('../../models');
 
 router.get('/', (req, res) => {
     //access user model and run .findAll() method
@@ -18,16 +18,27 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) =>{
     User.findOne({
         attributes: { exclude: ['password']},
+        where: {
+            id: req.params.id
+        },
         include: [
             {
               model: Post,
               attributes: ['id', 'title', 'post_url', 'created_at']
             },
             {
-              model: Post,
-              attributes: ['title'],
-              through: Vote,
-              as: 'voted_posts'
+                model: Comment,
+                attributes: ['id', 'comment_text', 'created_at'],
+                include: {
+                  model: Post,
+                  attributes: ['title']
+                }
+            },
+            {
+                model: Post,
+                attributes: ['title'],
+                through: Vote,
+                as: 'voted_posts'
             }
           ],
         where: {
