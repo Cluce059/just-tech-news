@@ -11,6 +11,8 @@
   </div>
 </article>
 
+
+{{#if loggedIn}}
 <form class="comment-form">
   <div>
     <textarea name="comment-body"></textarea>
@@ -35,5 +37,9 @@
   {{/each}}
 </div>
 
+<!-- conditionally render comments and upvotes so only logged in users can see them -->
+{{#if loggedIn }}
 <script src="/javascript/comment.js"></script>
 <script src="/javascript/upvote.js"></script>
+
+{{/if}}
